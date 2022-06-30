@@ -121,9 +121,11 @@ export default {
             email: this.user.email,
           }
         }).then(response => {
+          // eslint-disable-next-line no-debugger
+          debugger
           localStorage.user=JSON.stringify(response.data.register);
           var user_= JSON.parse(localStorage.getItem('user'));
-            if(user_.ok){
+            if(user_.ok=='true'){
             router.push({ name: "Home2", params: { reload: true } });
           }
           else{        

@@ -11,7 +11,7 @@ const AUTH_TOKEN = 'apollo-token'
 
 
 // Http endpoint
-const httpEndpoint = process.env.VUE_APP_GRAPHQL_HTTP || 'https://bananareader-ag-pnyjd4lexa-uc.a.run.app/'
+const httpEndpoint = process.env.VUE_APP_GRAPHQL_HTTP || 'http://34.133.131.203:8000'
 // Config
 const defaultOptions = {
   // You can use `https` for secure connection (recommended in production)
@@ -80,6 +80,36 @@ export function createProvider (options = {}) {
 
   return apolloProvider
 }
+
+const { apolloClient, wsClient } = createApolloClient({
+  ...defaultOptions,
+  fetchOptions: {
+    mode:'no-cors'
+  }
+})
+apolloClient.wsClient = wsClient
+export const apolloProvider = new VueApollo({
+  
+  // Default client
+  defaultClient: apolloClient,
+  // Default 'apollo' definition
+  defaultOptions: {
+    // See 'apollo' definition
+    // For example: default query options
+    $query: {
+      loadingKey: 'loading',
+      fetchPolicy: 'cache-and-network',
+    },
+  },
+ 
+  // Global error handler for all smart queries and subscriptions
+  errorHandler (error) {
+    console.log('Global error handler')
+    console.error(error)
+  },
+  // Globally turn off prefetch ssr
+  prefetch: Boolean,
+})
 
 // Manually call this when user log in
 export async function onLogin (apolloClient, token) {
